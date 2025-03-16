@@ -67,19 +67,27 @@ Install via:
 pip install -r requirements.txt
 
 
-Hardware Considerations
-Ultrasonic Transmission :
+# Hardware Considerations
+
+## Ultrasonic Transmission :
+
 Requires microphones/speakers with >20 kHz bandwidth (e.g., MEMS microphones, ultrasonic transducers).
-Audible Mode :
+
+## Audible Mode :
 Standard audio interfaces (16-bit, 44.1/48 kHz) suffice.
-Mathematical Validation
+
+## Mathematical Validation
+
+![image](https://github.com/user-attachments/assets/1db00ae6-5912-4fa8-a444-39cf74cb62e6)
+
 Nyquist-Shannon Sampling Theorem
 To avoid aliasing:
 BW=255×Δf=5,100 Hz (compact spectral footprint)
 
 
-
-Contributing
+## Contributing
 Bug Reports : Open an issue with FFT snapshots and hardware specs.
 Enhancements : Propose DSP optimizations (e.g., Goertzel algorithm).
 Hardware Tests : Share results with piezoelectric transducers.
+
+Victor Arbiol
