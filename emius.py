@@ -1,10 +1,10 @@
 import numpy as np
 from scipy.io.wavfile import write
 
-FS = 32000
+FS = 44100  # Frecuencia de muestreo compatible con ultrasonidos
 DURACION_BIT = 0.2
-FREQ_BASE = 1000  # Frecuencia base ajustada
-FREQ_INCREMENTO = 50  # Incremento reducido (max: 1000 + 255*50 = 13,750 Hz < 16 kHz)
+FREQ_BASE = 16000 # Frecuencia base que podemos cambiar
+FREQ_INCREMENTO = 50  # Espaciado entre caracteres
 AMPLITUD = 0.5
 
 def generar_senal(mensaje):
@@ -17,8 +17,7 @@ def generar_senal(mensaje):
         senal.extend(np.concatenate([onda, pausa]))
     return np.array(senal, dtype=np.float32)
 
-mensaje = "Hola Victor"
+mensaje = "Hola Mundo"
 senal = generar_senal(mensaje)
-write("senal.wav", FS, senal)
-print(f"senal.wav generado con el mensaje: {mensaje}")
-print(f"senal.wav generado con el mensaje: {mensaje}")
+write("senal_ultrasonica.wav", FS, senal)
+print(f"senal_ultrasonica.wav generado con el mensaje: {mensaje}")
