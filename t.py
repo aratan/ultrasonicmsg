@@ -4,15 +4,15 @@ import argparse
 
 # Parámetros críticos (DEBEN SER IGUALES EN RECEPTOR)
 FS = 44100               # Frecuencia de muestreo estándar
-FREQ_BASE = 155          # Frecuencia base para caracteres ASCII
+FREQ_BASE = 15000 # oculto 16000, normal 155
 FREQ_INCREMENTO = 50     # Espaciado entre caracteres (Hz)
 AMPLITUD = 0.8           # Amplitud ajustada (0.0 a 1.0)
 DURACION_BIT = 0.0667    # Duración de cada carácter (segundos, REDUCIDO)
-PREAMBLE = "AAA"         # Preámbulo para sincronización
+PREAMBLE = "*"         # Preámbulo para sincronización
 
 def generar_senal(mensaje):
     senal = []
-    mensaje_completo = PREAMBLE + mensaje
+    mensaje_completo = PREAMBLE + mensaje + ".*"
     
     for caracter in mensaje_completo:
         # Calcular frecuencia para cada carácter

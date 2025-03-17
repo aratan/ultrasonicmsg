@@ -4,7 +4,7 @@ from scipy.fft import rfft, rfftfreq
 
 # Parámetros críticos (DEBEN SER IGUALES QUE EMISOR)
 FS = 44100
-FREQ_BASE = 155
+FREQ_BASE = 15000 # oculto 16000, normal 155
 FREQ_INCREMENTO = 50
 TOLERANCIA = 200         # Tolerancia en Hz para detección
 UMBRAL_AMPLITUD = 0.8    # Umbral para detectar señal válida
