@@ -3,12 +3,12 @@ import sounddevice as sd
 import argparse
 
 # Parámetros críticos (DEBEN SER IGUALES EN RECEPTOR)
-FS = 44100               # Frecuencia de muestreo
-FREQ_BASE = 155          # ¡Base calculada para ASCII!
-FREQ_INCREMENTO = 50     # Espaciado entre caracteres
+FS = 44100               # Frecuencia de muestreo estándar
+FREQ_BASE = 155          # Frecuencia base para caracteres ASCII
+FREQ_INCREMENTO = 50     # Espaciado entre caracteres (Hz)
 AMPLITUD = 0.8           # Amplitud ajustada (0.0 a 1.0)
-DURACION_BIT = 0.2       # Duración de cada carácter (segundos)
-PREAMBLE = "AAAA"        # Secuencia de sincronización
+DURACION_BIT = 0.0667    # Duración de cada carácter (segundos, REDUCIDO)
+PREAMBLE = "AAA"         # Preámbulo para sincronización
 
 def generar_senal(mensaje):
     senal = []
@@ -20,8 +20,8 @@ def generar_senal(mensaje):
         tiempo = np.linspace(0, DURACION_BIT, int(FS * DURACION_BIT), False)
         onda = AMPLITUD * np.sin(2 * np.pi * frecuencia * tiempo)
         
-        # Añadir pausa entre caracteres
-        pausa = np.zeros(int(FS * 0.05))
+        # Añadir pausa entre caracteres (igual al 25% de DURACION_BIT)
+        pausa = np.zeros(int(FS * 0.0167))  # Pauses más cortas
         senal.extend(np.concatenate([onda, pausa]))
         
         print(f"Generado: '{caracter}' → {frecuencia} Hz")

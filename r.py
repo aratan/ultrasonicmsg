@@ -8,6 +8,8 @@ FREQ_BASE = 155
 FREQ_INCREMENTO = 50
 TOLERANCIA = 200         # Tolerancia en Hz para detección
 UMBRAL_AMPLITUD = 0.8    # Umbral para detectar señal válida
+DURACION_BIT = 0.0667    # Duración del bit (REDUCIDO)
+MUESTRAS_POR_CARACTER = int(FS * DURACION_BIT)  # Muestras por carácter
 
 # Variables de estado
 ultimo_caracter = None   # Para evitar repeticiones
@@ -43,46 +45,52 @@ def callback(indata, frames, time, status):
         print(status)
     
     data = indata[:, 0]  # Convertir a mono
-    bloque = data[:int(FS * 0.2)]  # Bloque de 0.2 segundos
+    buffer.extend(data)  # Acumular muestras en un buffer
     
-    # Aplicar ventana de Hanning
-    ventana = np.hanning(len(bloque))
-    bloque_ventana = bloque * ventana
-    
-    # Calcular FFT
-    frecuencias = rfftfreq(len(bloque_ventana), d=1/FS)
-    magnitudes = np.abs(rfft(bloque_ventana))
-    max_mag = np.max(magnitudes)
-    
-    # Ignorar ruido
-    if max_mag < UMBRAL_AMPLITUD:
-        return
-    
-    # Encontrar frecuencia dominante
-    freq_detectada = frecuencias[np.argmax(magnitudes)]
-    
-    # Verificar rango válido
-    if not (FREQ_BASE - TOLERANCIA <= freq_detectada <= FREQ_BASE + 255*FREQ_INCREMENTO + TOLERANCIA):
-        return
-    
-    # Decodificar carácter
-    codigo_ascii = round((freq_detectada - FREQ_BASE) / FREQ_INCREMENTO)
-    
-    # Validar que el código ASCII esté en el rango permitido
-    if codigo_ascii < 0 or codigo_ascii > 255:
-        #print(f"Frecuencia fuera de rango: {freq_detectada:.0f} Hz (código ASCII: {codigo_ascii})")
-        return
-    
-    caracter = chr(codigo_ascii)
-    
-    # Filtrar repeticiones temporales
-    if caracter == ultimo_caracter:
-        return  # Ignorar si es igual al último carácter detectado
-    
-    # Actualizar estado
-    ultimo_caracter = caracter
-    mensaje_recibido.append(caracter)
-    print(f"Recibido: {caracter} → {freq_detectada:.0f} Hz")
+    # Procesar en bloques de MUESTRAS_POR_CARACTER
+    while len(buffer) >= MUESTRAS_POR_CARACTER:
+        bloque = buffer[:MUESTRAS_POR_CARACTER]
+        del buffer[:MUESTRAS_POR_CARACTER]
+        
+        # Aplicar ventana de Hanning
+        ventana = np.hanning(len(bloque))
+        bloque_ventana = bloque * ventana
+        
+        # Calcular FFT
+        frecuencias = rfftfreq(len(bloque_ventana), d=1/FS)
+        magnitudes = np.abs(rfft(bloque_ventana))
+        max_mag = np.max(magnitudes)
+        
+        # Ignorar ruido
+        if max_mag < UMBRAL_AMPLITUD:
+            continue
+        
+        # Encontrar frecuencia dominante
+        freq_detectada = frecuencias[np.argmax(magnitudes)]
+        
+        # Verificar rango válido
+        if not (FREQ_BASE - TOLERANCIA <= freq_detectada <= FREQ_BASE + 255*FREQ_INCREMENTO + TOLERANCIA):
+            continue
+        
+        # Decodificar carácter
+        codigo_ascii = round((freq_detectada - FREQ_BASE) / FREQ_INCREMENTO)
+        
+        # Validar que el código ASCII esté en el rango permitido
+        if codigo_ascii < 0 or codigo_ascii > 255:
+            continue
+        
+        caracter = chr(codigo_ascii)
+        
+        # Filtrar repeticiones temporales
+        if caracter == ultimo_caracter:
+            continue  # Ignorar si es igual al último carácter detectado
+        
+        # Actualizar estado
+        ultimo_caracter = caracter
+        mensaje_recibido.append(caracter)
+        print(f"Recibido: {caracter} → {freq_detectada:.0f} Hz")
+
+buffer = []  # Buffer para acumular muestras
 
 def main():
     device_index = encontrar_dispositivo()
@@ -93,7 +101,7 @@ def main():
         channels=1,
         samplerate=FS,
         device=device_index,
-        blocksize=1024
+        blocksize=1024  # Tamaño de bloque fijo
     ):
         input("Presiona Enter para detener la recepción...\n")
     
