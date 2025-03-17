@@ -67,6 +67,12 @@ def callback(indata, frames, time, status):
     
     # Decodificar carácter
     codigo_ascii = round((freq_detectada - FREQ_BASE) / FREQ_INCREMENTO)
+    
+    # Validar que el código ASCII esté en el rango permitido
+    if codigo_ascii < 0 or codigo_ascii > 255:
+        #print(f"Frecuencia fuera de rango: {freq_detectada:.0f} Hz (código ASCII: {codigo_ascii})")
+        return
+    
     caracter = chr(codigo_ascii)
     
     # Filtrar repeticiones temporales
