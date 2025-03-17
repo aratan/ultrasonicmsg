@@ -84,6 +84,8 @@ Nyquist-Shannon Sampling Theorem
 To avoid aliasing:
 BW=255×Δf=5,100 Hz (compact spectral footprint)
 
+![image](https://github.com/user-attachments/assets/cadad36f-6e5d-4a15-8ccc-0fdd73a11f26)
+
 
 ## Contributing
 Bug Reports : Open an issue with FFT snapshots and hardware specs.
