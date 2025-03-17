@@ -65,7 +65,7 @@ The **Acoustic Data Transmission System (ADTS)** enables covert text transmissio
 Install via:  
 ```bash
 pip install -r requirements.txt
-
+```
 
 # Hardware Considerations
 
@@ -84,7 +84,8 @@ Nyquist-Shannon Sampling Theorem
 To avoid aliasing:
 BW=255×Δf=5,100 Hz (compact spectral footprint)
 
-![image](https://github.com/user-attachments/assets/cadad36f-6e5d-4a15-8ccc-0fdd73a11f26)
+![image](https://github.com/user-attachments/assets/3ed6730e-1ab8-4fa7-b4ec-5e03ce8a77be)
+
 
 
 ## Contributing
