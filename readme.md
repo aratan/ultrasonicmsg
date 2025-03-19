@@ -65,7 +65,7 @@ The **Acoustic Data Transmission System (ADTS)** enables covert text transmissio
 Install via:  
 ```bash
 pip install -r requirements.txt
-
+```
 
 # Hardware Considerations
 
@@ -83,6 +83,9 @@ Standard audio interfaces (16-bit, 44.1/48 kHz) suffice.
 Nyquist-Shannon Sampling Theorem
 To avoid aliasing:
 BW=255×Δf=5,100 Hz (compact spectral footprint)
+
+![image](https://github.com/user-attachments/assets/3ed6730e-1ab8-4fa7-b4ec-5e03ce8a77be)
+
 
 ## Main trasmitir y recibir 
 
